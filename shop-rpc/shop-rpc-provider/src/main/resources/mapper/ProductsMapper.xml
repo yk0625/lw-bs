@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xtt.shoprpcprovider.products.mapper.ProductsMapper">
+    <resultMap id="BaseResultMap" type="com.xtt.shoprpchander.products.entity.Products">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="products_type_id" property="productsTypeId" jdbcType="INTEGER"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="colorNum" property="colorNum" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="VARCHAR"/>
+        <result column="productDate" property="productDate" jdbcType="VARCHAR"/>
+        <result column="purchaseDate" property="purchaseDate" jdbcType="VARCHAR"/>
+        <result column="purchaseNum" property="purchaseNum" jdbcType="INTEGER"/>
+        <result column="amount" property="amount" jdbcType="INTEGER"/>
+        <result column="purchasePrice" property="purchasePrice" jdbcType="DECIMAL"/>
+        <result column="sellPrice" property="sellPrice" jdbcType="DECIMAL"/>
+        <result column="goodsImage" property="goodsImage" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.xtt.shoprpchander.products.entity.Products">
+    insert into products (id, products_type_id, goodsName, colorNum, area,
+      productDate, purchaseDate, purchaseNum, 
+      amount, purchasePrice, sellPrice, 
+      goodsImage, description, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{productsTypeId,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, #{colorNum,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
+      #{productDate,jdbcType=VARCHAR}, #{purchaseDate,jdbcType=VARCHAR}, #{purchaseNum,jdbcType=INTEGER}, 
+      #{amount,jdbcType=INTEGER}, #{purchasePrice,jdbcType=DECIMAL}, #{sellPrice,jdbcType=DECIMAL}, 
+      #{goodsImage,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.xtt.shoprpchander.products.entity.Products">
+        insert into products
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="productsTypeId != null">
+                products_type_id,
+            </if>
+            <if test="goodsName != null">
+                goodsName,
+            </if>
+            <if test="colorNum != null">
+                colorNum,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="productDate != null">
+                productDate,
+            </if>
+            <if test="purchaseDate != null">
+                purchaseDate,
+            </if>
+            <if test="purchaseNum != null">
+                purchaseNum,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="purchasePrice != null">
+                purchasePrice,
+            </if>
+            <if test="sellPrice != null">
+                sellPrice,
+            </if>
+            <if test="goodsImage != null">
+                goodsImage,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="productsTypeId != null">
+                #{productsTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="colorNum != null">
+                #{colorNum,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="productDate != null">
+                #{productDate,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseDate != null">
+                #{purchaseDate,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseNum != null">
+                #{purchaseNum,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=INTEGER},
+            </if>
+            <if test="purchasePrice != null">
+                #{purchasePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="sellPrice != null">
+                #{sellPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsImage != null">
+                #{goodsImage,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getProductsNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM products a join products_type b on a.products_type_id=b.typeNumber
+        where 1 = 1
+        <if test="typeName != null">
+            and b.typeName = #{typeName}
+        </if>
+    </select>
+
+    <sql id="Base_Column_List">
+        a.id as id,
+        a.products_type_id as productsTypeId,
+        a.goodsName as goodsName,
+        a.colorNum as colorNum,
+        a.area as area,
+        a.productDate as productDate,
+        a.purchaseDate as purchaseDate,
+        a.purchaseNum as purchaseNum,
+        a.amount as amount,
+        a.purchasePrice as purchasePrice,
+        a.sellPrice as sellPrice,
+        a.goodsImage as goodsImage,
+        a.description as description,
+        a.remark as remark,
+        b.typeName as typeName
+    </sql>
+    <select id="selectAllProducts" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM products a JOIN products_type b on a.products_type_id=b.typeNumber
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xtt.shoprpchander.products.entity.Products">
+        update products
+        <set>
+            <if test="goodsName != null">
+                goodsName = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="colorNum != null">
+                colorNum = #{colorNum,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null">
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="productDate != null">
+                productDate = #{productDate,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseDate != null">
+                purchaseDate = #{purchaseDate,jdbcType=VARCHAR},
+            </if>
+            <if test="purchaseNum != null">
+                purchaseNum = #{purchaseNum,jdbcType=INTEGER},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=INTEGER},
+            </if>
+            <if test="purchasePrice != null">
+                purchasePrice = #{purchasePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="sellPrice != null">
+                sellPrice = #{sellPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="goodsImage != null">
+                goodsImage = #{goodsImage,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM products WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectById" resultType="com.xtt.shoprpchander.products.entity.Products">
+        select
+        <include refid="Base_Column_List"/>
+        from products a join products_type b on a.products_type_id=b.typeNumber
+        where a.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 可分页的对象查询 -->
+    <select id="findList" resultType="com.xtt.shoprpchander.products.entity.Products">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM products a join products_type b on a.products_type_id=b.typeNumber
+        WHERE 1 = 1
+        <if test="id != null">
+            and a.id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="goodsName != null">
+            and a.goodsName = #{goodsName,jdbcType=VARCHAR}
+        </if>
+        <if test="colorNum != null">
+            and a.colorNum = #{colorNum,jdbcType=VARCHAR}
+        </if>
+        <if test="area != null">
+            and a.area = #{area,jdbcType=VARCHAR}
+        </if>
+        <if test="productDate != null">
+            and a.productDate = #{productDate,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseDate != null">
+            and a.purchaseDate = #{purchaseDate,jdbcType=VARCHAR}
+        </if>
+        <if test="purchaseNum != null">
+            and a.purchaseNum = #{purchaseNum,jdbcType=INTEGER}
+        </if>
+        <if test="amount != null">
+            and a.amount = #{amount,jdbcType=INTEGER}
+        </if>
+        <if test="purchasePrice != null">
+            and a.purchasePrice = #{purchasePrice,jdbcType=DECIMAL}
+        </if>
+        <if test="sellPrice != null">
+            and a.sellPrice = #{sellPrice,jdbcType=DECIMAL}
+        </if>
+        <if test="goodsImage != null">
+            and a.goodsImage = #{goodsImage,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null">
+            and a.description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="remark != null">
+            and a.remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="typeName != null">
+            and b.typeName = #{typeName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <select id="findListByIds" resultType="com.xtt.shoprpchander.products.entity.Products" parameterType="java.util.List">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM products a join products_type b on a.products_type_id=b.typeNumber
+        WHERE 1 = 1
+        <if test="goodIds != null">
+            and a.id in
+            <foreach collection="goodIds" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

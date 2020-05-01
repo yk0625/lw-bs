@@ -1,0 +1,4 @@
+INSERT INTO `address`(`id`, `accountId`, `consignee`, `province`, `city`, `district`, `detailAddress`, `zipcode`, `telephone`, `flag`) VALUES (4, 7, 'hello', '北京市', '北京市', '东城区', 'aaa', '123123', '15531301234', 0);
+INSERT INTO `address`(`id`, `accountId`, `consignee`, `province`, `city`, `district`, `detailAddress`, `zipcode`, `telephone`, `flag`) VALUES (5, 7, 'hello', '山西省', '太原市', '小店区', 'aaa', '123123', '15531301234', 1);
+INSERT INTO `address`(`id`, `accountId`, `consignee`, `province`, `city`, `district`, `detailAddress`, `zipcode`, `telephone`, `flag`) VALUES (6, 7, 'hello', '内蒙古自治区', '呼和浩特市', '新城区', 'aaa', '123123', '15531301234', 0);
+INSERT INTO `address`(`id`, `accountId`, `consignee`, `province`, `city`, `district`, `detailAddress`, `zipcode`, `telephone`, `flag`) VALUES (7, 7, 'hello', '江西省', '南昌市', '东湖区', 'aaa', '123123', '15531301234', 0);

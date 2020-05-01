@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xtt.shoprpcprovider.account.mapper.AccountMapper">
+    <sql id="Base_Column_List">
+        id, accountName, password, realName, phone, role, state
+    </sql>
+    <!-- 基础列 -->
+    <sql id="accountColumns">
+        a.id as id,
+        a.accountName as accountName,
+        a.password as password,
+        a.realName as realName,
+        a.phone as phone,
+        a.role as role,
+        a.state as state
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.xtt.shoprpchander.account.entity.Account">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="accountName" property="accountName" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="realName" property="realName" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="role" property="role" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.xtt.shoprpchander.account.entity.Account">
+    insert into account (id, accountName, password,
+      realName, phone, role,
+      state)
+    values (#{id,jdbcType=INTEGER}, #{accountName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{realName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR},
+      #{state,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xtt.shoprpchander.account.entity.Account">
+        insert into account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="accountName != null">
+                accountName,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="realName != null">
+                realName,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="role != null">
+                role,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="accountName != null">
+                #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectAllUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from account
+    </select>
+
+    <select id="getUsernumber" resultType="java.lang.Integer">
+        select count(*) from account
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from account
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xtt.shoprpchander.account.entity.Account">
+        update account
+        <set>
+            <if test="accountName != null">
+                accountName = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                realName = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                state = #{state,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据帐户名称取数据 -->
+    <select id="findByName" resultType="com.xtt.shoprpchander.account.entity.Account">
+        SELECT
+        <include refid="accountColumns"/>
+        FROM account a WHERE 1 = 1
+        AND a.accountName = #{accountName}
+    </select>
+</mapper>

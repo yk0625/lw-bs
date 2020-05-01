@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>口红详情</title>
+    <link type="text/css" rel="stylesheet" href="/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/animate.css"/>
+</head>
+
+<body>
+<!--导航部分  begin-->
+<div class="container" style="margin-top: 5px;">
+    <nav class="navbar navbar-default well-sm" style="padding-left: 0px;" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#example-navbar-collapse">
+                    <span class="sr-only">切换导航</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">在线商城</a>
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse" style="position:relative;">
+                <ul class="nav navbar-nav pull-left" id="ul_navbar_id">
+                    <li class="active">
+                        <a href="/homePage">首页</a>
+                    </li>
+                    <li>
+                        <a href="/order/list">我的订单</a>
+                    </li>
+                    <li>
+                        <a href="/order/cart"><span class="glyphicon glyphicon-shopping-cart"> </span>我的购物车</a>
+                    </li>
+                </ul>
+                <div class="input-group col-md-3 pull-right" id="beforeLogin"
+                     style="padding: 7px;position:absolute;top:50%;transform:translateY(-50%);right:0;text-align:right;">
+                    <a href="#" data-toggle="modal"
+                       style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;"
+                       data-target="#loginModel">登录</a> |
+                    <a href="#" data-toggle="modal"
+                       style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;"
+                       data-target="#registerModel">注册</a>
+                </div>
+                <input type="hidden" id="loginStatus" value="0" />
+                <div class="input-group col-md-3 pull-right" id="afterLogin"
+                     style="padding: 7px;position:absolute;top:50%;transform:translateY(-50%);right:0;text-align:right;display:none;">
+                    <span class="" id="accountNameSpan"
+                          style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;">用户名</span> |
+                    <span onclick="exitLogin()"
+                          style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;">安全退出</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<!--导航部分 end-->
+
+<!--最顶端轮播图片 begin-->
+<div id="gcarouse" class="container">
+    <!--轮播-->
+    <div id="myCarousel" class="carousel slide">
+        <!-- 轮播（Carousel）指标 -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <!-- 轮播（Carousel）项目 -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <a href="/order/detail"><img src="/images/advert1.jpg" class="pull-left" alt="First slide"></a>
+
+            </div>
+            <div class="item">
+                <a href="/order/detail"><img src="/images/advert2.jpg" class="pull-left" alt="First slide"></a>
+
+            </div>
+            <div class="item">
+                <a href="/order/detail"><img src="/images/advert3.jpg" class="pull-left" alt="First slide"></a>
+
+            </div>
+        </div>
+
+        <!-- 轮播（Carousel）导航 -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+</div>
+<!--最顶端轮播图片 end-->
+
+<!--外层div-->
+<div class="container">
+    <!--左边-->
+    <div class="col-md-8 col-sm-12">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#" th:text="${products.remark}">口红详情</a>
+            </li>
+            <li>
+                <a href="#" th:text="${products.goodsName}">迪奥</a>
+            </li>
+        </ol>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="thumbnail">
+                    <a><img th:src="${products.goodsImage}" id="imageUrl" style="height: 200px;" alt="通用的占位符缩略图"></a>
+                    <div class="caption">
+                        <h3 th:text="${products.goodsName}" id="goodsName">迪奥</h3>
+                        <p>双十一特价,包邮哟!亲<img src="/images/3.gif" style="width: 24px;height: 24px;"></p>
+                        <p>
+                        <div style="margin-bottom: 5px;width: 100px;">
+                            <input type="number" id="shopNum" class="form-control" placeholder="购买数量" min="1" max="100"
+                                   onclick="selectByCount(this)">
+                        </div>
+                        <div style="clear: both;">
+                            <!--<input type="number" class="form-control" placeholder="请输入" min="1" max="100" onclick="selectByCount(this)">-->
+                            <span onclick="confirmOrder()" class="btn btn-default" role="button">
+											<span class="glyphicon glyphicon-usd"></span> 立即购买
+										</span>
+                            <span onclick="addShop()" class="btn btn-default" role="button">
+											<span class="glyphicon glyphicon-shopping-cart"></span> 加入购物车
+										</span>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-6">
+                <div class="thumbnail">
+                    <input type="hidden" id="goodId" th:value="${products.id}"/>
+                    <ul class="list-group">
+                        <li class="list-group-item"><span class="text-success" th:text="'名称:' + ${products.goodsName}">名称:迪奥</span>
+                        </li>
+                        <!--<li class="list-group-item"><span class="text-info">色号: </span><span
+                                th:text="${products.colorNum}">740</span></li>-->
+                        <li class="list-group-item"><span class="text-info">生产日期: </span><span
+                                th:text="${products.productDate}">2019年01月</span></li>
+                        <li class="list-group-item"><span class="text-info"
+                                                          style="text-decoration: line-through;">原价:</span><span
+                                style="text-decoration: line-through;" th:text="${products.purchasePrice}">$36元</span>
+                        </li>
+                        <input type="hidden" id="sellPrice" th:value="${products.sellPrice}" />
+                        <li class="list-group-item"><span class="text-info">现价:</span><span
+                                th:text="${products.sellPrice} + '元'">21.6</span></li>
+                        <li class="list-group-item"><span class="text-info">说明:</span> <span
+                                th:text="${products.description}">一支很好看的番茄色，偏棕调，滋润度满分，微微光泽感，色调浓郁，显色度好</span>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--<hr>-->
+        <!--折叠部分 begin-->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                        展开详细信息
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <!--tab选项卡 begin-->
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#home" data-toggle="tab">
+                                商品详情
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#ios" data-toggle="tab"> <span class="badge pull-right">50</span>累计评价</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="home">
+                            <p>
+                                <em>产品参数：</em>
+                            </p>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <ul class="nav navbar-collapse" style="line-height: 3;">
+                                        <li class="text-info" th:text="'产品名称：' + ${products.goodsName}">产品名称：迪奥</li>
+                                        <li class="text-info" th:text="'定价: ' + ${products.sellPrice}">定价: 336.00元</li>
+                                        <li class="text-info" th:text="'生产时间: ' + ${products.productDate}">生产时间:
+                                            2019年01月
+                                        </li>
+                                        <li class="text-info" th:text="'生产地区: ' + ${products.area}">生产地区: 法国巴黎</li>
+                                    </ul>
+                                </div>
+                                <span class="visible-sm visible-xs"><hr></span>
+
+                            </div>
+                            </p>
+                        </div>
+                        <div class="tab-pane fade" id="ios">
+                            <p>
+                            <ul class="list-group">
+                                <li class="list-group-item"><span class="text-info">小明:</span><span
+                                        class="text-success ">淡淡的水蜜桃味道，不错哦<img src="/images/emotions/1.gif "></span>
+                                </li>
+                                <li class="list-group-item"><span class="text-info">success:</span><span
+                                        class="text-danger ">非常喜欢<img src="/images/emotions/2.gif "></span></li>
+                                <li class="list-group-item"><span class="text-info">叶老师:</span><span
+                                        class="text-success ">一次不错的购物体验<img src="/images/emotions/13.gif "></span></li>
+                                <li class="list-group-item"><span class="text-info">amdin:</span><span
+                                        class="text-danger ">被坑大发了.<img src="/images/emotions/17.gif "></span></li>
+                                <li class="list-group-item"><span class="text-info">rose:</span><span
+                                        class="text-danger ">卖家态度恶劣.<img src="/images/emotions/11.gif "></span></li>
+                            </ul>
+                            </p>
+                        </div>
+                    </div>
+                    <!--tab选项卡 end-->
+                </div>
+            </div>
+        </div>
+        <!--折叠部分end-->
+    </div>
+
+    <!--右边-->
+    <div class="col-md-4 col-sm-3 col-xs-8">
+        <ol class="breadcrumb ">
+            <li>
+                <a href="/order/cart" class="text-success "><span class="glyphicon glyphicon-shopping-cart "></span>我的购物车</a>
+            </li>
+            <li>
+                <span style="color: #428bca;" id="shopTotalNum">3个商品</span>
+            </li>
+            <li>
+                <span style="color: #428bca;" id="shopTotalPrice">总价100元</span>
+            </li>
+        </ol>
+
+        <!--猜您喜欢-->
+        <div>
+            <span class="text-info"><span class="glyphicon glyphicon-heart"></span><span
+                    style="font-size: 20px; ">猜您喜欢</span></span>
+            <div class="row" id="love_div_id">
+                // 右侧猜你喜欢
+            </div>
+            <div>
+                <ul class="pager">
+                    <li>
+                        <span style="color: #428bca;cursor: pointer;" onclick="changeBatch()">换一批</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <hr>
+    <!--首页底部信息 begin-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-2">
+                        <img src="/images/logo.png" width="80" height="80">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-10">
+                                <a href="http://www.sztzedu.com">红红网&copy;所有</a>
+                            </div>
+                        </div>
+                        <div class="gap"></div>
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-10">
+                                <span class="text-info">好看教育&reg; |&nbsp;</span>
+                                <span class="text-info">纪念品商城 |&nbsp;</span>
+                                <span class="text-info">2018－2019 </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 登录模态框（Modal） -->
+<div class="modal fade" id="loginModel" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    用户登录
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!--登录的form表单-->
+                <form class="form-horizontal" role="form" action="" id="loginForm">
+                    <div class="form-group has-feedback">
+                        <label for="accountName" class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="accountName" id="accountName"
+                                   placeholder="请输入用户名">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="passWord" class="col-sm-3 control-label">密码</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" name="passWord" id="passWord" placeholder="请输入密码">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">请记住我
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <input type="button" class="btn btn-primary" onclick="login()" value="登录">
+                    </div>
+                </form>
+                <!--form结束-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<!-- 注册modal end/.modal -->
+<div class="modal fade" id="registerModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    用户注册
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!--注册的form表单-->
+                <form action="" id="registerForm" class="form-horizontal" role="form">
+                    <div class="form-group has-feedback">
+                        <label for="firstname" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="accountName" class="form-control" id="firstname" required
+                                   placeholder="请输入用户名">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                        <!--<div class="col-sm-3" style="padding-top: 10px;">
+                            <label class="alert-danger">用户名不合法</label>
+                        </div>-->
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="passwordId" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="password" class="form-control" id="passwordId"
+                                   placeholder="密码长度6-8位"
+                                   minlength="6" maxlength="8">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                        <!--<div class="col-sm-3" style="padding-top: 10px;">
+                            <label class="alert-danger">密码不正确</label>
+                        </div>-->
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-2 control-label" for="passwordId2">确认密码</label>
+                        <div class="col-sm-5">
+                            <input type="password" class="form-control" id="passwordId2" minlength="6" maxlength="8"
+                                   placeholder="和密码保持一致">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-2 control-label">手机号</label>
+                        <div class="col-sm-5">
+                            <input type="tel" name="phone" class="form-control" id="phone" placeholder="合法手机格式">
+                            <span class="glyphicon glyphicon-earphone form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-2 control-label">真实姓名</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="realName" class="form-control" id="realName" placeholder="请输入真实姓名">
+                            <span class="glyphicon glyphicon-home form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <input type="button" class="btn btn-primary" value="注册" onclick="register()">
+                    </div>
+                </form>
+                <!--form结束-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<script src="/dist/js/jquery.min.js"></script>
+<script src="/dist/js/layer/layer.js"></script>
+<script src="/js/wow.js"></script>
+<script src="/js/carousel.js" type="text/javascript"></script>
+<script src="/dist/js/bootstrap.min.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/details.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

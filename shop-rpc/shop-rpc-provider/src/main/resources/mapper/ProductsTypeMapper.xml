@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xtt.shoprpcprovider.productstype.mapper.ProductsTypeMapper">
+    <resultMap id="BaseResultMap" type="com.xtt.shoprpchander.productstype.entity.ProductsType">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="typeNumber" property="typeNumber" jdbcType="VARCHAR"/>
+        <result column="typeName" property="typeName" jdbcType="VARCHAR"/>
+        <result column="typeOrder" property="typeOrder" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.xtt.shoprpchander.productstype.entity.ProductsType">
+    insert into products_type (id, typeNumber, typeName, 
+      typeOrder, remark)
+    values (#{id,jdbcType=INTEGER}, #{typeNumber,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, 
+      #{typeOrder,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xtt.shoprpchander.productstype.entity.ProductsType">
+        insert into products_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="typeNumber != null">
+                typeNumber,
+            </if>
+            <if test="typeName != null">
+                typeName,
+            </if>
+            <if test="typeOrder != null">
+                typeOrder,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="typeNumber != null">
+                #{typeNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="typeName != null">
+                #{typeName,jdbcType=VARCHAR},
+            </if>
+            <if test="typeOrder != null">
+                #{typeOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectAllProducts" resultMap="BaseResultMap">
+    SELECT * FROM products_type
+    </select>
+
+    <select id="getTypeNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM products_type
+    </select>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM products_type WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.xtt.shoprpchander.productstype.entity.ProductsType">
+        update products_type
+        <set>
+            <if test="typeNumber != null">
+                typeNumber = #{typeNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="typeName != null">
+                typeName = #{typeName,jdbcType=VARCHAR},
+            </if>
+            <if test="typeOrder != null">
+                typeOrder = #{typeOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectById" resultType="com.xtt.shoprpchander.productstype.entity.ProductsType">
+        select * from products_type;
+    </select>
+    
+    <select id="selectByProductsType" parameterType="com.xtt.shoprpchander.productstype.entity.ProductsType" resultType="com.xtt.shoprpchander.productstype.entity.ProductsType">
+        select * from products_type a where 1 = 1
+        <if test="id != null">
+            and a.id = #{id}
+        </if>
+        <if test="typeNumber != null">
+            and a.typeNumber = #{typeNumber}
+        </if>
+        <if test="typeName != null">
+            and a.typeName = #{typeName}
+        </if>
+        <if test="typeOrder != null">
+            and a.typeOrder = #{typeOrder}
+        </if>
+        <if test="remark != null">
+            and a.remark = #{remark}
+        </if>
+    </select>
+</mapper>

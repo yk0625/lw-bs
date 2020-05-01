@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xtt.shoprpcprovider.address.mapper.AddressMapper">
+    <!-- 基础列 -->
+    <sql id="addressColumns">
+        a.id as id,
+        a.accountId as accountId,
+        a.consignee as consignee,
+        a.province as province,
+        a.city as city,
+        a.district as district,
+        a.detailAddress as detailAddress,
+        a.zipcode as zipcode,
+        a.telephone as telephone,
+        a.flag as flag
+    </sql>
+    <resultMap id="BaseResultMap" type="com.xtt.shoprpchander.address.entity.Address">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="accountId" jdbcType="INTEGER" property="accountId"/>
+        <result column="consignee" jdbcType="VARCHAR" property="consignee"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="city" jdbcType="VARCHAR" property="city"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="detailAddress" jdbcType="VARCHAR" property="detailAddress"/>
+        <result column="zipcode" jdbcType="VARCHAR" property="zipcode"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="flag" jdbcType="INTEGER" property="flag"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.xtt.shoprpchander.address.entity.Address">
+    insert into address (id, accountId, consignee, 
+      province, city, district, 
+      detailAddress, zipcode, telephone, 
+      flag)
+    values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{consignee,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{detailAddress,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
+      #{flag,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xtt.shoprpchander.address.entity.Address">
+        insert into address
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="accountId != null">
+                accountId,
+            </if>
+            <if test="consignee != null">
+                consignee,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="district != null">
+                district,
+            </if>
+            <if test="detailAddress != null">
+                detailAddress,
+            </if>
+            <if test="zipcode != null">
+                zipcode,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="flag != null">
+                flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="accountId != null">
+                #{accountId,jdbcType=INTEGER},
+            </if>
+            <if test="consignee != null">
+                #{consignee,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="district != null">
+                #{district,jdbcType=VARCHAR},
+            </if>
+            <if test="detailAddress != null">
+                #{detailAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="zipcode != null">
+                #{zipcode,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="flag != null">
+                #{flag,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 选择性更新数据 -->
+    <update id="updateByPrimaryKeySelective" parameterType="com.xtt.shoprpchander.address.entity.Address">
+        update address
+        <set>
+            <if test="consignee != null">
+                consignee = #{consignee} ,
+            </if>
+            <if test="province != null">
+                province = #{province} ,
+            </if>
+            <if test="city != null">
+                city = #{city} ,
+            </if>
+            <if test="district != null">
+                district = #{district},
+            </if>
+            <if test="detailAddress != null">
+                detailAddress = #{detailAddress} ,
+            </if>
+            <if test="zipcode != null">
+                zipcode = #{zipcode} ,
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone} ,
+            </if>
+            <if test="flag != null">
+                flag = #{flag}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据主键逻辑删除 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from address where id = #{id}
+    </delete>
+
+    <!-- 根据主键取数据 -->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long"
+            resultType="com.xtt.shoprpchander.address.entity.Address">
+        select
+        <include refid="addressColumns"/>
+        from address a where a.id = #{id}
+    </select>
+
+    <!-- 可分页的对象查询 -->
+    <select id="findList" resultType="com.xtt.shoprpchander.address.entity.Address">
+        SELECT
+        <include refid="addressColumns"/>
+        FROM address a WHERE 1 = 1
+        <if test="accountId != null">
+            and a.accountId = #{accountId}
+        </if>
+        <if test="consignee != null">
+            and a.consignee = #{consignee}
+        </if>
+        <if test="province != null">
+            and a.province = #{province}
+        </if>
+        <if test="city != null">
+            and a.city = #{city}
+        </if>
+        <if test="district != null">
+            and a.district = #{district}
+        </if>
+        <if test="detailAddress != null">
+            and a.detailAddress = #{detailAddress}
+        </if>
+        <if test="zipcode != null">
+            and a.zipcode = #{zipcode}
+        </if>
+        <if test="telephone != null">
+            and a.telephone = #{telephone}
+        </if>
+        <if test="flag != null">
+            and a.flag = #{flag}
+        </if>
+    </select>
+
+</mapper>

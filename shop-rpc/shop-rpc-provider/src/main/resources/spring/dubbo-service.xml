@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 后台用户服务-->
+    <bean name="userService" class="com.xtt.shoprpcprovider.user.service.UserServiceImpl"/>
+
+    <!-- 前台账户服务-->
+    <bean name="accountService" class="com.xtt.shoprpcprovider.account.service.AccountServiceImpl"/>
+
+    <!-- 商品类型服务-->
+    <bean name="productsTypeService" class="com.xtt.shoprpcprovider.productstype.service.ProductsTypeImpl"/>
+
+    <bean name="productsService" class="com.xtt.shoprpcprovider.products.service.ProductsServiceImpl"/>
+
+    <bean name="orderService" class="com.xtt.shoprpcprovider.order.service.OrderServiceImpl"/>
+
+    <bean name="addressService" class="com.xtt.shoprpcprovider.address.service.AddressServiceImpl"/>
+
+</beans>

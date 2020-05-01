@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <link type="text/css" rel="stylesheet" href="/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/animate.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/order_list.css"/>
+</head>
+
+<body>
+<!--导航部分  begin-->
+<div class="container" style="margin-top: 5px;">
+    <nav class="navbar navbar-default well-sm" style="padding-left: 0px;" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#example-navbar-collapse">
+                    <span class="sr-only">切换导航</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">在线商城</a>
+            </div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse" style="position:relative;">
+                <ul class="nav navbar-nav pull-left" id="ul_navbar_id">
+                    <li class="active">
+                        <a href="/homePage">首页</a>
+                    </li>
+                    <li>
+                        <a href="/order/list">我的订单</a>
+                    </li>
+                    <li>
+                        <a href="/order/cart"><span class="glyphicon glyphicon-shopping-cart"> </span>我的购物车</a>
+                    </li>
+                </ul>
+                <div class="input-group col-md-3 pull-right" id="beforeLogin"
+                     style="padding: 7px;position:absolute;top:50%;transform:translateY(-50%);right:0;text-align:right;">
+                    <a href="#" data-toggle="modal"
+                       style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;"
+                       data-target="#loginModel">登录</a> |
+                    <a href="#" data-toggle="modal"
+                       style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;"
+                       data-target="#registerModel">注册</a>
+                </div>
+                <input type="hidden" id="loginStatus" value="0" />
+                <div class="input-group col-md-3 pull-right" id="afterLogin"
+                     style="padding: 7px;position:absolute;top:50%;transform:translateY(-50%);right:0;text-align:right;display:none;">
+                    <span class="" id="accountNameSpan"
+                          style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;">用户名</span> |
+                    <span onclick="exitLogin()"
+                          style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;">安全退出</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<!--导航部分 end-->
+
+<!--最顶端轮播图片 begin-->
+<div id="gcarouse" class="container">
+    <!--轮播-->
+    <div id="myCarousel" class="carousel slide">
+        <!-- 轮播（Carousel）指标 -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <!-- 轮播（Carousel）项目 -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <a href="/order/detail"><img src="/images/advert1.jpg" class="pull-left" alt="First slide"></a>
+
+            </div>
+            <div class="item">
+                <a href="/order/detail"><img src="/images/advert2.jpg" class="pull-left" alt="First slide"></a>
+
+            </div>
+            <div class="item">
+                <a href="/order/detail"><img src="/images/advert3.jpg" class="pull-left" alt="First slide"></a>
+
+            </div>
+        </div>
+
+        <!-- 轮播（Carousel）导航 -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+</div>
+<!--最顶端轮播图片 end-->
+
+<!--订单begin-->
+<!--外层div-->
+<div class="container">
+    <!--左边-->
+    <div class="container pull-left">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#" class="text-success"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;我的订单</a>
+            </li>
+        </ol>
+
+        <!--订单查询导航 begin-->
+        <div>
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">所有订单</a>
+                </div>
+
+                <form class="navbar-form navbar-left" role="search" action="/order/list">
+                    <input type="hidden" value="true" name="flag" />
+                    <input type="text" class="form-control" placeholder="输入订单号进行查询" name="orderNum" id="orderNum_id" th:value="${orderNum}">
+                    <button type="submit" class="btn btn-search" th:onclick="">
+                        <span class="text-success">Search</span>&nbsp;&nbsp;<span
+                            class="glyphicon glyphicon-search"></span>
+                    </button>
+                </form>
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            交易状态
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/order/list">全部</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/order/list?status=paymented">已付款</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/order/list?status=wait">未付款</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/order/list?status=shipMenting">发货中</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/order/list?status=shipMented">已发货</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/order/list?status=received">已收货</a>
+                            </li>
+                            <li class="divider"></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            订单排序
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/order/list?sort=desc">订单日期降序</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/order/list?sort=asc">订单日期升序</a>
+                            </li>
+                            <li class="divider"></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="padding-right: 15px;">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">更多筛选条件</a>
+                    </li>
+                </ul>
+
+                <ul class="nav navbar-nav">
+                    <li>
+                        <span onclick="delOrder()" style="position: relative;display: block;padding: 10px 15px;padding-top: 15px;cursor: pointer;color: #777;">删除订单</span>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <span style="position: relative;display: block;padding: 10px 15px;padding-top: 15px;cursor: pointer;color: #777;" onclick="delAllOrder()">清空订单列表</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!--订单查询导航 end-->
+        <!--日期控件-->
+        <div id="collapseTwo" class="panel-collapse collapse">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div>
+                        <form class="form-horizontal" action="/order/list">
+                            <div class="form-group has-feedback">
+                                <div class="col-md-1" style="padding-top:5px ;">
+                                    成交日期:
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" id="datetimepicker" name="startTime" placeholder="开始时间">
+                                    <span class="glyphicon glyphicon-time form-control-feedback"></span>
+                                </div>
+                                <div class="col-md-1" style="padding-top:5px ;text-align:center;">
+                                    至
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" id="datetimepicker2" name="endTime" placeholder="结束日期">
+                                    <span class="glyphicon glyphicon-time form-control-feedback"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-default">查询&nbsp;&nbsp;<span
+                                            class="glyphicon glyphicon-search"></span></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--日期控件-->
+
+        <!--内容展示 begin-->
+        <div class="table-responsive">
+            <table class="table table-hover table-striped" th:each="item,orderStat:${result}" id="tby">
+                <caption class="text-info">
+                    <div class="col-md-10" style="padding-left: 0px;">
+                        <input type="checkbox" name="cks" th:orderNumber="${orderStat.current.value[0].getOrderNumber()}">&nbsp;<span th:text="${orderStat.current.value[0].getPaymentDate()}"></span> 订单号:<span th:text="${orderStat.current.key}"></span>单
+                    </div>
+                    <div class="col-md-2" style="text-align: right;">
+                        <a data-toggle="collapse" data-parent="#accordion" th:href="'#' + ${orderStat.current.key}">订单详情</a>
+                    </div>
+                </caption>
+                <thead>
+                <tr th:id="${orderStat.current.key}" class="panel-collapse collapse">
+                    <td colspan="9">
+                        <div class="panel-body">
+                            <!--tab选项卡 begin-->
+                            <ul class="nav nav-tabs">
+                                <li style="display: none;">
+                                    <a href="#home" data-toggle="tab">
+                                        联系人信息
+                                    </a>
+                                </li>
+                                <li  class="active">
+                                    <a href="#ios" data-toggle="tab">订单信息</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="home">
+                                    <div class="row">
+                                        <div>
+                                            <ul class="nav navbar-collapse" style="line-height: 3;">
+                                                <li class="text-info"><span class="text-success">姓名:</span><span class="text-info" th:text="${orderStat.current.value[0].getConsignee()}"></span>
+                                                </li>
+                                                <li class="text-info"><span class="text-success">联系方式:</span><span th:text="${orderStat.current.value[0].getTelephone()}"></span>
+                                                </li>
+                                                <li class="text-info"><span class="text-success">收货地址:</span><span th:text="${orderStat.current.value[0].getAddressInfo()}"></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    </p>
+                                </div>
+                                <div class="tab-pane fade" id="ios">
+                                    <div class="row">
+                                        <div>
+                                            <ul class="nav navbar-collapse" style="line-height: 3;">
+                                                <li class="text-info"><span class="text-success">订单编号:</span><span class="text-info" th:text="${orderStat.current.value[0].getOrderNumber()}"></span>
+                                                </li>
+                                                <li class="text-info"><span class="text-success">交易时间:</span><span th:text="${orderStat.current.value[0].getPaymentDate()}"></span>
+                                                </li>
+                                                <li class="text-info"><span class="text-success">订单总金额:</span><span th:text="${orderStat.current.value[0].getAllAmount()}"></span>元
+                                                </li>
+                                                <li class="text-info"><span class="text-success">交易状态:</span>
+                                                    <input type="hidden" name="orderStatus" th:value="${orderStat.current.value[0].getState()}" />
+                                                    <span th:text="${orderStat.current.value[0].getState() == 'paymented' ? '已付款'
+                                                    : (orderStat.current.value[0].getState() == 'wait' ? '未付款'
+                                                    : (orderStat.current.value[0].getState() == 'shipMenting' ? '发货中'
+                                                    : (orderStat.current.value[0].getState() == 'shipMented' ? '已发货'
+                                                    : (orderStat.current.value[0].getState() == 'received' ? '已收货' : '订单状态异常'
+                                                    ))))}"></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--tab选项卡 end-->
+                        </div>
+                    </td>
+                </tr>
+                <tr class="active">
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>图片名称</th>
+                    <th>单价(元)</th>
+                    <th>数量</th>
+                    <th>实付款(元)</th>
+                    <th>付款日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="warning" th:each="order, orderstaste : ${orderStat.current.value}">
+                    <td th:text="${order.goodsId}"></td>
+                    <td><img th:src="@{${order.imageUrl}}"></td>
+                    <td><span th:text="${order.goodsName}"></span></td>
+                    <td th:text="${order.price} + '元'"></td>
+                    <td th:text="${order.num}">7</td>
+                    <td th:text="${order.totalPrice} + '元'"></td>
+                    <td th:text="${order.paymentDate}">01/08/2017</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--内容展示end-->
+    </div>
+    <!--分页begin-->
+    <!--<div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <ul class="pagination">
+                    <li><a href="#">首页</a></li>
+                    <li class="disabled"><a href="#">&laquo;</a></li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li class="active"><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                    <li><a href="#" style="border: 1px solid #ddd;">尾页</a></li>
+                    <li><a style="border: 0px;margin-left: 0px;">当前页3/5总页</a></li>
+                    <li>
+
+                        <div id="search" class="input-group" style="positon:relative;">
+                            <input type="text" class="form-control" placeholder="跳转指定页"/>
+                            <span class="input-group-btn">
+							            <button class="btn btn-info btn-search">GO</button>
+									</span>
+                        </div>
+                    </li>
+                    <li><a style="padding-top: 0px;border: 0px;">
+                        <label>每页显示:</label>
+                        <select id="pageSize" class="form-control" style="width: 100px;display: inline;">
+                            <option value="2">2</option>
+                            <option value="2">4</option>
+                            <option value="2">6</option>
+                            <option value="2">8</option>
+                        </select>
+                        <label>条</label>
+                    </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>-->
+    <!--分页end-->
+</div>
+
+<div class="container">
+    <hr>
+    <!--首页底部信息 begin-->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-2">
+                        <img src="/images/logo.png" width="80" height="80">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-10">
+                                <a href="http://www.sztzedu.com">红红网&copy;所有</a>
+                            </div>
+                        </div>
+                        <div class="gap"></div>
+                        <div class="row">
+                            <div class="col-md-offset-2 col-md-10">
+                                <span class="text-info">好看教育&reg; |&nbsp;</span>
+                                <span class="text-info">纪念品商城 |&nbsp;</span>
+                                <span class="text-info">2018－2019 </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 登录模态框（Modal） -->
+<div class="modal fade" id="loginModel" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    用户登录
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!--登录的form表单-->
+                <form class="form-horizontal" role="form" action="" id="loginForm">
+                    <div class="form-group has-feedback">
+                        <label for="accountName" class="col-sm-3 control-label">用户名</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="accountName" id="accountName"
+                                   placeholder="请输入用户名">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="passWord" class="col-sm-3 control-label">密码</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" name="passWord" id="passWord" placeholder="请输入密码">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">请记住我
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <input type="button" class="btn btn-primary" onclick="login()" value="登录">
+                    </div>
+                </form>
+                <!--form结束-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<!-- 注册modal end/.modal -->
+<div class="modal fade" id="registerModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    用户注册
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!--注册的form表单-->
+                <form action="" id="registerForm" class="form-horizontal" role="form">
+                    <div class="form-group has-feedback">
+                        <label for="firstname" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="accountName" class="form-control" id="firstname" required
+                                   placeholder="请输入用户名">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                        <!--<div class="col-sm-3" style="padding-top: 10px;">
+                            <label class="alert-danger">用户名不合法</label>
+                        </div>-->
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label for="passwordId" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-5">
+                            <input type="password" name="password" class="form-control" id="passwordId"
+                                   placeholder="密码长度6-8位"
+                                   minlength="6" maxlength="8">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                        <!--<div class="col-sm-3" style="padding-top: 10px;">
+                            <label class="alert-danger">密码不正确</label>
+                        </div>-->
+                    </div>
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-2 control-label" for="passwordId2">确认密码</label>
+                        <div class="col-sm-5">
+                            <input type="password" class="form-control" id="passwordId2" minlength="6" maxlength="8"
+                                   placeholder="和密码保持一致">
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-2 control-label">手机号</label>
+                        <div class="col-sm-5">
+                            <input type="tel" name="phone" class="form-control" id="phone" placeholder="合法手机格式">
+                            <span class="glyphicon glyphicon-earphone form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <label class="col-sm-2 control-label">真实姓名</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="realName" class="form-control" id="realName" placeholder="请输入真实姓名">
+                            <span class="glyphicon glyphicon-home form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <input type="button" class="btn btn-primary" value="注册" onclick="register()">
+                    </div>
+                </form>
+                <!--form结束-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<!--end-->
+<script src="/dist/js/jquery.min.js"></script>
+<script src="/dist/js/layer/layer.js"></script>
+<script src="/dist/js/bootstrap.min.js"></script>
+<script src="/js/moment.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/bootstrap-datetimepicker.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/navbar.js"></script>
+<script type="text/javascript">
+    $('#datetimepicker').datetimepicker();
+    $('#datetimepicker2').datetimepicker();
+
+    function delAllOrder() {
+        layer.confirm('确认删除全部订单嘛!', {btn: ['确定', '取消'], title: "提示"}, function () {
+            $.ajax({
+                async: false,
+                url: "/order/delAllOrder",
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        layer.alert("删除成功!", {icon: 2, time: 2000},function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert(data.message, {icon: 2, time: 2000});
+                    }
+                },
+                error: function (data) {
+                    console.info(data);
+                    layer.alert("系统发生错误，请稍后再试", {icon: 2, time: 2000});
+                }
+            });
+        });
+    }
+
+    function delOrder() {
+        var orderNumbers = new Array();
+        var count = 0;
+        var cks = document.getElementsByName("cks");
+        for (var i = cks.length - 1; i >= 0; i--) {
+            if (cks[i].checked) {
+                orderNumbers[count++] = cks[i].getAttribute("orderNumber");
+            }
+        }
+        console.info(orderNumbers);
+        if(orderNumbers.length == 0)
+        {
+            layer.alert('请先选择订单!', {icon: 2, time: 2000});
+            return;
+        }
+        if(orderNumbers.length > 1)
+        {
+            layer.alert('一次最多删除一笔订单!', {icon: 2, time: 2000});
+            return;
+        }
+        layer.confirm('确认删除嘛!', {btn: ['确定', '取消'], title: "提示"}, function () {
+            $.ajax({
+                async: false,
+                url: "/order/delOrder",
+                type: 'GET',
+                data: {
+                    'orderNumber': orderNumbers[0]
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        layer.alert("删除成功!", {icon: 2, time: 2000},function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.alert(data.message, {icon: 2, time: 2000});
+                    }
+                },
+                error: function (data) {
+                    console.info(data);
+                    layer.alert("系统发生错误，请稍后再试", {icon: 2, time: 2000});
+                }
+            });
+        });
+    }
+
+</script>
+</body>
+</html>

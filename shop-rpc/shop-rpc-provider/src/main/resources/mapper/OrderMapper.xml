@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xtt.shoprpcprovider.order.mapper.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.xtt.shoprpchander.order.entity.Order">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="accountId" property="accountId" jdbcType="INTEGER"/>
+        <result column="goodsId" property="goodsId" jdbcType="INTEGER"/>
+        <result column="addressId" property="addressId" jdbcType="INTEGER"/>
+        <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR"/>
+        <result column="goodsName" property="goodsName" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="totalPrice" property="totalPrice" jdbcType="DECIMAL"/>
+        <result column="orderNumber" property="orderNumber" jdbcType="VARCHAR"/>
+        <result column="paymentDate" property="paymentDate" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 基础列 -->
+    <sql id="orderColumns">
+        a.id as id,
+        a.accountId as accountId,
+        a.goodsId as goodsId,
+        a.addressId as addressId,
+        a.imageUrl as imageUrl,
+        a.goodsName as goodsName,
+        a.price as price,
+        a.num as num,
+        a.totalPrice as totalPrice,
+        a.orderNumber as orderNumber,
+        a.paymentDate as paymentDate,
+        a.state as state,
+        c.consignee as consignee,
+        c.telephone as telephone,
+        concat(c.province, c.city, c.district, c.detailAddress) as addressInfo
+    </sql>
+    <insert id="insert" parameterType="com.xtt.shoprpchander.order.entity.Order">
+    insert into t_order (id, accountId, goodsId, addressId,
+      imageUrl, goodsName, price, 
+      num, totalPrice, orderNumber, 
+      paymentDate, state)
+    values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},  #{addressId,jdbcType=INTEGER},
+      #{imageUrl,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{num,jdbcType=INTEGER}, #{totalPrice,jdbcType=DECIMAL}, #{orderNumber,jdbcType=VARCHAR}, 
+      #{paymentDate,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.xtt.shoprpchander.order.entity.Order">
+        insert into t_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="accountId != null">
+                accountId,
+            </if>
+            <if test="goodsId != null">
+                goodsId,
+            </if>
+            <if test="addressId != null">
+                addressId,
+            </if>
+            <if test="imageUrl != null">
+                imageUrl,
+            </if>
+            <if test="goodsName != null">
+                goodsName,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="totalPrice != null">
+                totalPrice,
+            </if>
+            <if test="orderNumber != null">
+                orderNumber,
+            </if>
+            <if test="paymentDate != null">
+                paymentDate,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="accountId != null">
+                #{accountId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="addressId != null">
+                #{addressId,jdbcType=INTEGER},
+            </if>
+            <if test="imageUrl != null">
+                #{imageUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null">
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="orderNumber != null">
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentDate != null">
+                #{paymentDate,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into t_order(
+        id ,
+        accountId ,
+        goodsId ,
+        addressId ,
+        imageUrl ,
+        goodsName ,
+        price ,
+        num ,
+        totalPrice ,
+        orderNumber ,
+        paymentDate ,
+        state
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id} ,
+            #{item.accountId} ,
+            #{item.goodsId} ,
+            #{item.addressId} ,
+            #{item.imageUrl} ,
+            #{item.goodsName} ,
+            #{item.price} ,
+            #{item.num} ,
+            #{item.totalPrice} ,
+            #{item.orderNumber} ,
+            #{item.paymentDate} ,
+            #{item.state})
+        </foreach>
+    </insert>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update t_order set
+            accountId = #{item.accountId} ,
+            goodsId = #{item.goodsId} ,
+            addressId = #{item.addressId} ,
+            imageUrl = #{item.imageUrl} ,
+            goodsName = #{item.goodsName} ,
+            price = #{item.price} ,
+            num = #{item.num} ,
+            totalPrice = #{item.totalPrice} ,
+            orderNumber = #{item.orderNumber} ,
+            paymentDate = #{item.paymentDate} ,
+            state = #{item.state}
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <!-- 选择性更新数据 -->
+    <update id="updateByPrimaryKeySelective" parameterType="com.xtt.shoprpchander.order.entity.Order">
+        update t_order
+        <set>
+            <if test="accountId != null">
+                accountId = #{accountId} ,
+            </if>
+            <if test="goodsId != null">
+                goodsId = #{goodsId} ,
+            </if>
+            <if test="addressId != null">
+                addressId = #{addressId} ,
+            </if>
+            <if test="imageUrl != null">
+                imageUrl = #{imageUrl} ,
+            </if>
+            <if test="goodsName != null">
+                goodsName = #{goodsName} ,
+            </if>
+            <if test="price != null">
+                price = #{price} ,
+            </if>
+            <if test="num != null">
+                num = #{num} ,
+            </if>
+            <if test="totalPrice != null">
+                totalPrice = #{totalPrice} ,
+            </if>
+            <if test="orderNumber != null">
+                orderNumber = #{orderNumber} ,
+            </if>
+            <if test="paymentDate != null">
+                paymentDate = #{paymentDate} ,
+            </if>
+            <if test="state != null">
+                state = #{flag}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据主键逻辑删除 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from t_order where id = #{id}
+    </delete>
+
+    <!-- 根据主键取数据 -->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+            resultType="com.xtt.shoprpchander.order.entity.Order">
+        select
+        <include refid="orderColumns"/>
+        FROM t_order a join account b on a.accountId = b.id
+        join address c on a.addressId = c.id
+        where a.id = #{id}
+    </select>
+
+    <!-- 可分页的对象查询 -->
+    <select id="findList" resultType="com.xtt.shoprpchander.order.entity.Order">
+        SELECT
+        d.purchasePrice as purchasePrice ,
+        <include refid="orderColumns"/>
+        FROM t_order a join account b on a.accountId = b.id
+        join address c on a.addressId = c.id join products d on a.goodsId = d.id
+        WHERE 1 = 1
+        <if test="accountId != null and accountId != ''">
+            and a.accountId = #{accountId}
+        </if>
+        <if test="goodsId != null and goodsId != ''">
+            and a.goodsId = #{goodsId}
+        </if>
+        <if test="addressId != null and addressId != ''">
+            and a.addressId = #{addressId}
+        </if>
+        <if test="imageUrl != null and imageUrl != ''">
+            and a.imageUrl = #{imageUrl}
+        </if>
+        <if test="goodsName != null and goodsName != ''">
+            and a.goodsName = #{goodsName}
+        </if>
+        <if test="price != null and price != ''">
+            and a.price = #{price}
+        </if>
+        <if test="num != null and num != ''">
+            and a.num = #{num}
+        </if>
+        <if test="totalPrice != null and totalPrice != ''">
+            and a.totalPrice = #{totalPrice}
+        </if>
+        <if test="orderNumber != null and orderNumber != ''">
+            and a.orderNumber = #{orderNumber}
+        </if>
+        <if test="paymentDate != null and paymentDate != ''">
+            and a.paymentDate = #{paymentDate}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            and a.paymentDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and a.paymentDate &lt;= #{endDate}
+        </if>
+        <if test="state != null and state != ''">
+            and a.state = #{state}
+        </if>
+        <if test="sort != null and sort != ''">
+            order by a.paymentDate ${sort}
+        </if>
+    </select>
+
+    <!-- 根据用户Id 删除订单 -->
+    <delete id="delByAccountId" parameterType="java.lang.Integer">
+        delete from t_order where accountId = #{accountId}
+    </delete>
+    <!-- 根据订单号 删除订单 -->
+    <delete id="delByOrderNum" parameterType="java.lang.String">
+        delete from t_order where orderNumber = #{orderNumber}
+    </delete>
+
+    <select id="findOrderByNum" parameterType="java.lang.String" resultType="com.xtt.shoprpchander.order.entity.Order">
+        select * from t_order where orderNumber = #{orderNumber}
+    </select>
+
+    <update id="submitOrder">
+        update t_order set
+        state = #{state}
+        <if test="addressId != null">
+            , addressId = #{addressId}
+        </if>
+        where orderNumber = #{orderNum}
+    </update>
+
+    <select id="getOrderNumber" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM t_order
+    </select>
+
+    <select id="selectAllOrders" resultMap="BaseResultMap">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM t_order a join account b on a.accountId = b.id
+        join address c on a.addressId = c.id
+    </select>
+
+    <update id="updateOrderStatusById" >
+        update t_order set
+        state = #{status}
+        where id = #{id}
+    </update>
+    <delete id="delAllOrder" parameterType="java.lang.Integer">
+        delete from t_order where accountId = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,94 @@
+server:
+  port: 8086
+
+#数据源配置
+spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main  # 需要重启的目录
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/xtt_bs?characterEncoding=UTF-8
+    username: xtt
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    platform: mysql
+    druid:
+      #用于采集web-jdbc关联监控的数据
+      web-stat-filter:
+        #添加过滤规则
+        url-pattern: '/*'
+        #排除一些不必要的url
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+        enabled: true
+        #配置profileEnable能够监控单个url调用的sql列表
+        profile-enable: true
+        #session统计功能
+        session-stat-enable: true
+        #session-stat-max-count: 2
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        #是否可以重置统计页面
+        reset-enable: true
+        #控制台管理用户
+        login-username: root
+        login-password: 123456
+      aop-patterns: com.example.demo.cn.service.*
+      #最大连接池数量,  推荐的公式：((core_count * 2) + effective_spindle_count)
+      max-active: 200
+      #最小连接池数量
+      min-idle: 10
+      initial-size: 10
+      max-wait: 60000
+      #销毁线程中如果检测到当前连接的最后活跃时间和当前时间的差值大于minEvictableIdleTimeMillis，则关闭当前连接。(毫秒) 当前值: 30分钟
+      minEvictableIdleTimeMillis: 1800000
+      #用来检测连接是否有效的sql，要求是一个查询语句。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用
+      validationQuery: select 'x' from dual
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 600000
+      #建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于 timeBetweenEvictionRunsMillis，
+      #执行validationQuery检测连接是否有效。
+      testWhileIdle: true
+      #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+      testOnBorrow: false
+      #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      testOnReturn: false
+      #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      poolPreparedStatements: false
+      #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+      maxOpenPreparedStatements: 0
+      connection-properties: "config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI0/5xoPD11/XeqtJef25bnsMwxfxbRC6x+j4rInDKYLzajTu5wkd/5+fl5bMAfhB37n4hoAvqQpz3mFSkOc9ZMCAwEAAQ=="
+      filters: stat,wall,log4j,config
+    tomcat:
+      #对于长时间不使用的连接强制关闭
+      remove-abandoned: true
+      #超过30分钟开始关闭空闲连接3-
+      remove-abandoned-timeout: 1800
+      #将当前关闭动作记录到日志
+      log-abandoned: true
+
+#mybatis配置
+mybatis:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  check-config-location: true
+  executor-type: simple
+#分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+logging:
+  path: logs/shop-rpc-provider
+  file: shop-rpc-provider.log
+  level:
+    com.pmzhongguo: info
+    org.apache: error
+    springfox: error
+  pattern:
+    console: "[%d{HH:mm:ss:SSS}] [%p] - %pid - %l - %m%n"

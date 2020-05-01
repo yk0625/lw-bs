@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+#  devtools:
+#    restart:
+#      exclude: static/**,templates/**
+#      enabled: true
+#分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

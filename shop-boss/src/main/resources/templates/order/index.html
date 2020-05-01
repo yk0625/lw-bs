@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+>
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="/easyui/themes/default/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="/easyui/themes/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="/easyui/demo/demo.css"/>
+    <script type="text/javascript" src="/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/easyui/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/js1/manageruser.js"></script>
+</head>
+<style>
+    .datagrid-btable {
+        width: 100%;
+    }
+
+    .datagrid-header-inner {
+        width: 100%;
+    }
+
+    .datagrid-header {
+        width: 100%;
+    }
+
+    .datagrid-htable {
+        width: 100%;
+    }
+
+    .datagrid-cell {
+        margin: auto;
+    }
+
+    .fitem {
+        text-align: center;
+    }
+
+    .ftitle {
+        text-align: center
+    }
+</style>
+
+<body>
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="width: 100%;height: 9%">
+    </div>
+
+    <div data-options="region:'center',title:'用户列表'">
+        <table id="datagrid" class="easyui-datagrid" style="width:100%;height:100%"
+               url="/o/orderList"
+               toolbar="#dgtoolbar" pagination="true"
+               pageSize="25" pageList="[25,15,10]"
+               rownumbers="false" fitColumns="true" singleSelect="true">
+            <thead>
+            <tr>
+                <th data-options="field:'goodsName',align:'center',width:'6%'">商品名称</th>
+                <th data-options="field:'price',align:'center',width:'6%'">商品价格</th>
+                <th data-options="field:'num',align:'center',width:'6%'">下单数量</th>
+                <th data-options="field:'totalPrice',align:'center',width:'8%'">支付金额</th>
+                <th data-options="field:'orderNumber',align:'center',width:'8%'">订单编号</th>
+                <th data-options="field:'paymentDate',align:'center',width:'8%'">付款日期</th>
+                <th data-options="field:'consignee',align:'center',width:'8%'">收货人</th>
+                <th data-options="field:'addressInfo',align:'center',width:'12%'">收货地址</th>
+                <th data-options="field:'telephone',align:'center',width:'8%'">联系方式</th>
+                <th data-options="field:'state',align:'center',width:'8%'" >订单状态</th>
+            </tr>
+            </thead>
+        </table>
+        <div id="dgtoolbar">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="confirmOrder('shipMented')">确认发货</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="confirmOrder('rejected')">拒绝发货</a>
+        </div>
+
+    </div>
+</div>
+
+<div id="modifydg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#modifydg-buttons">
+    <div class="ftitle">商品类别信息</div>
+    <form id="fim" method="post">
+        <div class="fitem" style="display: none">
+            <label>类别ID:</label>
+            <input name="id" readonly="readonly" class="easyui-validatebox form-control" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>类别编号:</label>
+            <input name="typenumber" class="easyui-validatebox form-control" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>类别名称:</label>
+            <input name="typename" class="easyui-validatebox form-control" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>类别顺序:</label>
+            <input name="typeorder" class="easyui-validatebox" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>备注:</label>
+            <input name="remark" class="easyui-validatebox" required="true"/>
+        </div>
+
+    </form>
+</div>
+<div id="modifydg-buttons">
+    <a href="#" class="easyui-linkbutton" onclick="modifyProducts()">保存</a>
+    <a href="#" class="easyui-linkbutton" onclick="javascript:$('#modifydg').dialog('close')">取消</a>
+</div>
+
+<div id="adddg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#adddg-buttons">
+    <div class="ftitle">用户信息</div>
+    <form id="fam" method="post">
+        <div class="fitem">
+            <label>类型编号:</label>
+            <input name="typenumber" class="easyui-validatebox" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>类别名称:</label>
+            <input name="typename" class="easyui-validatebox" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>类别排序:</label>
+            <input name="typeorder" class="easyui-validatebox" required="true"/>
+        </div>
+        <div class="fitem">
+            <label>备注:</label>
+            <input name="remark" class="easyui-validatebox" required="true"/>
+        </div>
+
+    </form>
+</div>
+<div id="adddg-buttons">
+    <a href="#" class="easyui-linkbutton" onclick="addProductsType()">添加</a>
+    <a href="#" class="easyui-linkbutton" onclick="javascript:$('#adddg').dialog('close')">取消</a>
+</div>
+
+
+<script type="text/javascript">
+</script>
+</body>
+</html>

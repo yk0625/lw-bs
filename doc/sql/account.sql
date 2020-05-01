@@ -1,0 +1,10 @@
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (6, 'haha01', '123456', 'qaqw', '15531304321', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (7, 'hello', '123456', 'yukai', '15531304321', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (8, 'xtt', '123456', 'xtt', '15531301597', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (100, '彭于晏', '123', '彭彭', '122', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (101, '张三', '123', 'zs', '123', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (331, 'test', '1234567', 'yukai', '15531301234', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (332, '12312', '123123', 'yukai', '15531304321', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (333, '111', '123123', 'yukai', '15531301222', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (334, '1123', '123123', 'yukai', '15531304311', 'consumer', 'normal');
+INSERT INTO `account`(`id`, `accountName`, `password`, `realName`, `phone`, `role`, `state`) VALUES (104893775, '123123', '123123', 'yukai', '15531304366', 'consumer', 'normal');
