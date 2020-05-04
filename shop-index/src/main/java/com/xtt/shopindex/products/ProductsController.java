@@ -8,6 +8,8 @@ import com.xtt.shopcommon.bean.Pagination;
 import com.xtt.shopcommon.enums.CommonEnums;
 import com.xtt.shoprpchander.products.entity.Products;
 import com.xtt.shoprpchander.products.service.ProductsService;
+import com.xtt.shoprpchander.productstype.entity.ProductsType;
+import com.xtt.shoprpchander.productstype.service.ProductsTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +37,15 @@ public class ProductsController extends GenericController
     @Autowired(required = false)
     private ProductsService productsService;
 
+    @Autowired(required = false)
+    private ProductsTypeService productsTypeService;
+
     /**
      * 获取商品列表
      *
-     * @param typeName      商品类型
-     * @param goodsName     商品名称
-     * @param pagination    分页对象
+     * @param typeName   商品类型
+     * @param goodsName  商品名称
+     * @param pagination 分页对象
      * @return
      */
     @RequestMapping(value = "productsList")
@@ -57,7 +62,23 @@ public class ProductsController extends GenericController
     }
 
     /**
+     * 获取商品列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "productType")
+    @ResponseBody
+    public JsonMessage productType()
+    {
+        JsonMessage jsonMessage = getJsonMessage(CommonEnums.SUCCESS);
+        List<ProductsType> result = productsTypeService.findAllProductsType(1, 100);
+        jsonMessage.setObject(result);
+        return jsonMessage;
+    }
+
+    /**
      * 换一批推荐
+     *
      * @return
      */
     @RequestMapping("changeBatch")
@@ -65,7 +86,7 @@ public class ProductsController extends GenericController
     public JsonMessage changeBatch()
     {
         JsonMessage jsonMessage = getJsonMessage(CommonEnums.SUCCESS);
-        List<Products> result =  productsService.findList(new Products());
+        List<Products> result = productsService.findList(new Products());
         //随机取三条数据
         List<Products> resp = Lists.newArrayList();
         Random random = new Random();
@@ -73,12 +94,12 @@ public class ProductsController extends GenericController
         while (true)
         {
             int tmp = random.nextInt(result.size());
-            if(!integerList.contains(tmp))
+            if (!integerList.contains(tmp))
             {
                 integerList.add(tmp);
                 resp.add(result.get(tmp));
             }
-            if(integerList.size() >= 3)
+            if (integerList.size() >= 3)
             {
                 break;
             }

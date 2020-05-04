@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 
 <head lang="en">
     <meta charset="UTF-8">
@@ -51,7 +51,7 @@
                        style="padding:10px 10px;text-decoration:none;cursor:pointer;color:#777;"
                        data-target="#registerModel">注册</a>
                 </div>
-                <input type="hidden" id="loginStatus" value="0" />
+                <input type="hidden" id="loginStatus" value="0"/>
                 <div class="input-group col-md-3 pull-right" id="afterLogin"
                      style="padding: 7px;position:absolute;top:50%;transform:translateY(-50%);right:0;text-align:right;display:none;">
                     <span class="" id="accountNameSpan"
@@ -99,7 +99,7 @@
 <!--最顶端轮播图片 end-->
 
 <!--内容部分 begin-->
-<div class="container">
+<div class="container" id="content-middle">
     <!--精选 begin-->
     <div>
         <div class="text-primary"><img src="/images/bullet1.gif" alt="" title="">
@@ -169,30 +169,30 @@
     <div class="container">
         <!--首页底部信息 begin-->
         <div class="container">
-<!--            <div class="row">-->
-<!--                <div class="col-md-offset-2 col-md-8">-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-md-offset-2 col-md-2">-->
-<!--                            <img src="/images/logo.png" width="80" height="80">-->
-<!--                        </div>-->
-<!--                        <div class="col-md-6">-->
-<!--                            <div class="row">-->
-<!--                                <div class="col-md-offset-2 col-md-10">-->
-<!--                                    <a href="http://www.sztzedu.com">红红网&copy;所有</a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="gap"></div>-->
-<!--                            <div class="row">-->
-<!--                                <div class="col-md-offset-2 col-md-10">-->
-<!--                                    <span class="text-info">好看教育&reg; |&nbsp;</span>-->
-<!--                                    <span class="text-info">纪念品商城 |&nbsp;</span>-->
-<!--                                    <span class="text-info">2018－2019 </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="row">-->
+            <!--                <div class="col-md-offset-2 col-md-8">-->
+            <!--                    <div class="row">-->
+            <!--                        <div class="col-md-offset-2 col-md-2">-->
+            <!--                            <img src="/images/logo.png" width="80" height="80">-->
+            <!--                        </div>-->
+            <!--                        <div class="col-md-6">-->
+            <!--                            <div class="row">-->
+            <!--                                <div class="col-md-offset-2 col-md-10">-->
+            <!--                                    <a href="http://www.sztzedu.com">红红网&copy;所有</a>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="gap"></div>-->
+            <!--                            <div class="row">-->
+            <!--                                <div class="col-md-offset-2 col-md-10">-->
+            <!--                                    <span class="text-info">好看教育&reg; |&nbsp;</span>-->
+            <!--                                    <span class="text-info">纪念品商城 |&nbsp;</span>-->
+            <!--                                    <span class="text-info">2018－2019 </span>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <img src="/images/footer.jpg" style="width: 96%" alt="通用的占位符缩略图">
         </div>
     </div>
@@ -228,7 +228,8 @@
                     <div class="form-group has-feedback">
                         <label for="passWord" class="col-sm-3 control-label">密码</label>
                         <div class="col-sm-6">
-                            <input type="password" class="form-control" name="passWord" id="passWord" placeholder="请输入密码">
+                            <input type="password" class="form-control" name="passWord" id="passWord"
+                                   placeholder="请输入密码">
                             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                         </div>
                     </div>
@@ -338,6 +339,9 @@
 <script type="text/javascript">
 
     $(function () {
+        // 加载中间内容
+        initHtml();
+
         layerRemind();
         //初始化数据
         initData('jx_row');
@@ -351,10 +355,9 @@
     function layerRemind() {
         var url = window.location.pathname;
         console.info(url);
-        if(url.indexOf('/homePage') == -1
-        && url != ""
-        && url != "/")
-        {
+        if (url.indexOf('/homePage') == -1
+            && url != ""
+            && url != "/") {
             layer.alert('请先登陆!', {icon: 2, time: 2000});
         }
     }
@@ -374,7 +377,29 @@
         initData(div_id);
     }
 
+    function initHtml() {
+        $("#content-middle").html('');
+        $.ajax({
+            async: false,
+                url: "/products/productType",
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    datahandlerContent(data);
+                } else {
+                    layer.alert(data.message, {icon: 2, time: 2000});
+                }
+            },
+            error: function (data) {
+                console.info(data);
+                layer.alert("系统发生错误，请稍后再试", {icon: 2, time: 2000});
+            }
+        });
+    }
+
     function initData(div_id) {
+        console.info(div_id)
         $('#' + div_id).html('');
         $.ajax({
             async: false,
@@ -405,6 +430,7 @@
         });
     }
 
+
     // 首页数据模板处理
     function dataHandler(data, jx_row_id) {
         var list = data.object.list;
@@ -425,6 +451,34 @@
                 </div>
             `
             $('#' + jx_row_id).append(row);
+        }
+    }
+
+    function datahandlerContent(data) {
+        var list = data.object;
+        for (var i = 0; i < list.length; i++) {
+            var row = `
+                <div>
+                    <div class="text-primary"><img src="/images/bullet1.gif" alt="" title="">
+                        <span style="color: #428bca;">${list[i].typeName}</span>
+                    </div>
+                    <div class="row" id="${list[i].remark}" typeName="${list[i].typeName}" page=1>
+                        <!-- 查询后台插入数据 -->
+                    </div>
+                    <!--分页-->
+                    <div class="container">
+                        <ul class="pager">
+                            <li class="disabled" id= ${list[i].remark + "_pre"} onclick="preData()">
+                                <span class="span_disable">&larr;上一页</span>
+                            </li>
+                            <li id= ${list[i].remark + "_next"} onclick="nextData()">
+                                <span class="span_able">下一页 &rarr;</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            `
+            $('#content-middle').append(row);
         }
     }
 

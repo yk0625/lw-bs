@@ -12,7 +12,6 @@ import com.xtt.shoprpchander.order.entity.Order;
 import com.xtt.shoprpchander.order.service.OrderService;
 import com.xtt.shoprpchander.products.entity.Products;
 import com.xtt.shoprpchander.products.service.ProductsService;
-import com.xtt.shoprpchander.productstype.service.ProductsTypeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,9 +41,6 @@ public class IndexController extends GenericController
 
     @Autowired(required = false)
     private ProductsService productsService;
-
-    @Autowired(required = false)
-    private ProductsTypeService productsTypeService;
 
     @Autowired(required = false)
     private OrderService orderService;
@@ -160,7 +156,7 @@ public class IndexController extends GenericController
     @RequestMapping(value = "order/confirmI")
     public String orderConfirmI(Model model, String orderNum, Integer goodsId, String imageUrl, String goodsName, String price, Integer num, HttpServletRequest request)
     {
-        if(StringUtils.isEmpty(price) || num == null)
+        if (StringUtils.isEmpty(price) || num == null)
         {
             return "index";
         }
